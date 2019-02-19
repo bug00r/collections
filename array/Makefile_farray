@@ -1,0 +1,70 @@
+MAKE?=mingw32-make
+AR?=ar
+ARFLAGS?=rcs
+PATHSEP?=/
+CC=gcc
+BUILDROOT?=build
+
+ifeq ($(CLANG),1)
+	export CC=clang
+endif
+
+BUILDDIR?=$(BUILDROOT)$(PATHSEP)$(CC)
+BUILDPATH?=$(BUILDDIR)$(PATHSEP)
+
+ifeq ($(DEBUG),1)
+	export debug=-Ddebug=1 -ggdb
+	export isdebug=1
+endif
+
+ifeq ($(ANALYSIS),1)
+	export analysis=-Danalysis=1
+	export isanalysis=1
+endif
+
+ifeq ($(DEBUG),2)
+	export debug=-Ddebug=2 -ggdb
+	export isdebug=1
+endif
+
+ifeq ($(DEBUG),3)
+	export debug=-Ddebug=3 -ggdb
+	export isdebug=1
+endif
+
+ifeq ($(OUTPUT),1)
+	export outimg=-Doutput=1
+endif
+
+CFLAGS=-std=c11 -Wall -Wextra -O1 $(debug)
+##-ggdb
+##-pg for profiling 
+
+MODULE=farray
+
+SRC=$(MODULE).c
+
+LIBNAME=lib$(MODULE).a
+OBJS=$(MODULE).o
+
+TESTSRC=test_$(MODULE).c
+TESTBIN=test_$(MODULE).exe
+TESTLIB=-larray -l$(MODULE)
+TESTLIBDIR=-L$(BUILDDIR)
+
+all: $(addprefix $(BUILDPATH),$(LIBNAME) $(TESTBIN) $(OBJS)) test
+ 
+$(BUILDPATH)$(LIBNAME): $(BUILDPATH)$(OBJS)
+	$(AR) $(ARFLAGS) $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(OBJS)
+
+$(BUILDPATH)$(OBJS): $(MODULE).h
+	$(CC) $(CFLAGS) -c $(SRC) -o $(BUILDPATH)$(OBJS)
+
+$(BUILDPATH)$(TESTBIN):
+	$(CC) $(CFLAGS) $(TESTSRC) -o $(BUILDPATH)$(TESTBIN) $(TESTLIBDIR) $(TESTLIB) 
+	
+.PHONY: test
+
+test: 
+	./$(BUILDPATH)$(TESTBIN)
+	
