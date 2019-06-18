@@ -308,6 +308,24 @@ void* hgen_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(vo
 	return result; 
 }
 
+int hgen_search_once_id(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {
+	int result = -1;
+	bool found = false;
+
+	dl_list_item_t* cur_node = list->first;
+
+	while(cur_node != NULL) {
+		++result;
+		if ( searchfunc(cur_node->data, search_data) ) {
+			found = true;
+			break;
+		}
+		cur_node = cur_node->next;
+	}
+
+	return (found ? result : -1 ); 
+}
+
 dl_list_t* hgen_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
 	dl_list_t *result = dl_list_new();
 

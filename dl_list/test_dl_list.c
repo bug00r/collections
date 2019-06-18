@@ -470,6 +470,8 @@ static void test_dl_list_search_once() {
 
 	assert(hgen_search_once(list, NULL, __dl_list_search_int_gt2) == &data4);
 
+	assert(hgen_search_once_id(list, NULL, __dl_list_search_int_gt2) == 2);
+
 	dl_list_free(&list);
 
 	assert(list == NULL);
