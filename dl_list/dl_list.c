@@ -340,3 +340,17 @@ dl_list_t* hgen_search(dl_list_t *list, void *search_data, bool (*searchfunc)(vo
 
 	return result; 
 }
+
+void dl_list_each(dl_list_t *list, void (eachfunc)(void **data)) {
+
+	dl_list_item_t* cur_node = list->first;
+
+	while(cur_node != NULL) {
+
+		eachfunc(&cur_node->data);
+		
+		cur_node = cur_node->next;
+	
+	}
+
+}

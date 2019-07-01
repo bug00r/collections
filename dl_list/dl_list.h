@@ -33,6 +33,7 @@ void  dl_list_remove_free(dl_list_t *list, uint32_t index, void (freefunc)(void 
 void* hgen_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
 int   hgen_search_once_id(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
 dl_list_t* hgen_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
+void  dl_list_each(dl_list_t *list, void (eachfunc)(void **data));
 
 
 #endif
