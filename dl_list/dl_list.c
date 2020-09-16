@@ -341,7 +341,7 @@ dl_list_t* hgen_search(dl_list_t *list, void *search_data, bool (*searchfunc)(vo
 	return result; 
 }
 
-void dl_list_each(dl_list_t *list, void (eachfunc)(void **data)) {
+void dl_list_each(dl_list_t *list, EACH_FUNC eachfunc) {
 
 	dl_list_item_t* cur_node = list->first;
 
@@ -355,7 +355,7 @@ void dl_list_each(dl_list_t *list, void (eachfunc)(void **data)) {
 
 }
 
-void  dl_list_each_data(dl_list_t *list, void* eachdata, void (eachfunc)(void **data, void *eachdata)) {
+void  dl_list_each_data(dl_list_t *list, void* eachdata, EACH_FUNC_DATA eachfunc) {
 	dl_list_item_t* cur_node = list->first;
 
 	while(cur_node != NULL) {

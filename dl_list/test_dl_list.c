@@ -444,10 +444,12 @@ static void test_dl_list_remove_free() {
 }
 
 static bool __dl_list_search_int_gt2(void *item, void* searchdata) {
+	(void)searchdata;
 	return *(int *)item > 2;
 }
 
 static bool __dl_list_search_int_lt3(void *item, void* searchdata) {
+	(void)searchdata;
 	return *(int *)item <= 3;
 }
 
