@@ -40,7 +40,7 @@ CFLAGS=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb -O1 
 #-pg for profiling 
 
-INCLUDEDIR=-I./../../data -I.
+INCLUDEDIR=-I/c/dev/include
 
 SRC=linked_list.c
 
@@ -50,8 +50,9 @@ OBJS=linked_list.o
 TESTSRC=test_linked_list.c
 TESTBIN=test_linked_list.exe
 TESTLIB=-llinked_list -ldata
-TESTLIBDIR=-L$(BUILDPATH) -L./../../data/$(BUILDDIR)
+TESTLIBDIR=-L$(BUILDPATH) -L/c/dev/lib
 
+INSTALL_ROOT?=$(BUILDPATH)
 
 all: createdir $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(TESTBIN) test
 
@@ -74,4 +75,9 @@ createdir:
 
 clean:
 	-rm -dr $(BUILDROOT)
-	
+
+install:
+	mkdir -p $(INSTALL_ROOT)include
+	mkdir -p $(INSTALL_ROOT)lib
+	cp ./linked_list.h $(INSTALL_ROOT)include/linked_list.h
+	cp $(BUILDPATH)$(LIBNAME) $(INSTALL_ROOT)lib/$(LIBNAME)

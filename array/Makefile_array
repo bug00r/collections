@@ -52,6 +52,8 @@ TESTBIN=test_$(MODULE).exe
 TESTLIB=-l$(MODULE)
 TESTLIBDIR=-L$(BUILDDIR)
 
+INSTALL_ROOT?=$(BUILDPATH)
+
 all: $(addprefix $(BUILDPATH),$(LIBNAME) $(TESTBIN) $(OBJS)) test
  
 $(BUILDPATH)$(LIBNAME): $(BUILDPATH)$(OBJS)
@@ -67,3 +69,9 @@ $(BUILDPATH)$(TESTBIN):
 
 test: 
 	./$(BUILDPATH)$(TESTBIN)
+
+install:
+	mkdir -p $(INSTALL_ROOT)include
+	mkdir -p $(INSTALL_ROOT)lib
+	cp ./$(MODULE).h $(INSTALL_ROOT)include/$(MODULE).h
+	cp $(BUILDPATH)$(LIBNAME) $(INSTALL_ROOT)lib/$(LIBNAME)
