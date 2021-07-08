@@ -36,7 +36,14 @@ ifeq ($(OUTPUT),1)
 	export outimg=-Doutput=1
 endif
 
-CFLAGS=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra -ggdb
+BIT_SUFFIX=
+
+ifeq ($(M32),1)
+	CFLAGS+=-m32
+	BIT_SUFFIX+=32
+endif
+
+CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb -O1 
 #-pg for profiling 
 
