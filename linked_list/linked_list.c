@@ -461,6 +461,23 @@ void llist_append_list(llist_t * _list, llist_t * _list2){
 	}
 }
 
+void* llist_list_get_data(llist_t *list, uint32_t index) {
+	llist_t * src = list; 
+	ll_node_t * next = src->start;
+	uint32_t curIdx = 0;
+	void *result = NULL;
+	while(next != NULL) {
+		if (curIdx++ == index) {
+			if ( next->data ) {
+				result = next->data->data;
+			}
+			break;
+		}
+		next = next->next;
+	}
+	return result;
+}
+
 #if 0
 /**
 Merges two lists. The second list is the starting list.

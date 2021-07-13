@@ -845,6 +845,20 @@ static void _test_append_list_() {
 		assert(node3->next->next->next != NULL);
 		assert(node3->next->next->next == list->end);
 		
+		void *datares = llist_list_get_data(list, 666);
+		assert(datares == NULL);
+		datares = llist_list_get_data(list, 0);
+		assert( datares != NULL );
+		assert( *((unsigned int*)datares)  == 666 );
+
+		datares = llist_list_get_data(list, 1);
+		assert( datares != NULL );
+		assert( *((unsigned int*)datares)  == 667 );
+
+		datares = llist_list_get_data(list, 2);
+		assert( datares != NULL );
+		assert( *((unsigned int*)datares)  == 668 );
+
 		llist_free(&list2);
 		llist_free(&list);
 		

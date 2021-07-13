@@ -2,6 +2,7 @@
 #define LINKED_LIST_H
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "data.h"
 
 //New Version
@@ -136,6 +137,12 @@ delete node after node. Deletes node if it exist in list.
 */
 #endif
 void llist_delete_node_before(llist_t * list, ll_node_t * delnode);
+#if 0
+/**
+	gets the data of given index or NULL
+*/
+#endif
+void* llist_list_get_data(llist_t *list, uint32_t index);
 #if 0
 /**
 Add element at beginning of list.
