@@ -43,7 +43,7 @@ ifeq ($(M32),1)
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra $(debug)
+CFLAGS+=-std=c11 -Wpedantic -Wall -Wextra $(debug)
 ##-ggdb
 ##-pg for profiling 
 
