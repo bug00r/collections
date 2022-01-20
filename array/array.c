@@ -60,7 +60,7 @@ array_get(array_t *  array, int index, void (*assoc_func)(void *  result, int ne
 
 array_error_t 
 array2D_get(array_t *  array, int j, int i, void (*assoc_func)(void *  result, int newidx,void *  value), void *  result){
-	return array_get( array, (i * array->config->size + j), (*assoc_func), result);
+	return array_get( array, (i * array->config->cnt + j), (*assoc_func), result);
 }
 
 array_error_t 
@@ -77,7 +77,7 @@ array_set(array_t *  array, int index, void *  value, void (*assoc_func)(void * 
 
 array_error_t 
 array2D_set(array_t *  array, int j, int i, void *  value, void (*assoc_func)(void *  array_entry, int newidx ,void *  value)){
-	return array_set( array, (i * array->config->size + j), value, (*assoc_func));
+	return array_set( array, (i * array->config->cnt + j), value, (*assoc_func));
 }
 
 array_iterator_t * 
