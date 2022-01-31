@@ -31,7 +31,7 @@ static void _test_old_list() {
 		printf("cnt elements: %i\n", list->len);
 		element * curelement;
 		for( curelement = list->start; curelement != NULL ; curelement = curelement->next ) {
-			printf("element: %s\n", curelement->data);
+			printf("element: %s\n", (char*)curelement->data);
 		}
 	}
 	#endif
@@ -39,19 +39,19 @@ static void _test_old_list() {
 	void *data = linkedlistutils.get(list,2);
 	assert(data != NULL);
 	#ifdef debug
-		printf("data idx: 2 = %s\n", data);
+		printf("data idx: 2 = %s\n", (char*)data);
 	#endif
 	
 	data = linkedlistutils.get(list,3);
 	assert(data != NULL);
 	#ifdef debug
-		printf("data idx: 3 = %s\n", data);
+		printf("data idx: 3 = %s\n", (char*)data);
 	#endif
 	
 	data = linkedlistutils.get(list,12);
 	assert(data == NULL);
 	#ifdef debug
-		printf("data idx: 12 = %s\n", data);
+		printf("data idx: 12 = %s\n", (char*)data);
 	#endif
 	linkedlistutils.clear(list, free);
 	#ifdef debug
@@ -70,14 +70,15 @@ static void _test_old_list() {
 	#endif
 	
 	list = linkedlistutils.new();
-	for ( unsigned int i = 0; i < 12; linkedlistutils.append(list, (int*)++i) );
+	int testdata[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+	for ( unsigned int i = 0; i < 12; ++i )  linkedlistutils.append(list, &testdata[i]);
 	
 	#ifdef debug 
 	{
 		printf("unsigned int elements: %i\n", list->len);
 		element * curelement;
 		for( curelement = list->start; curelement != NULL ; curelement = curelement->next ) {
-			printf("unsigned int: %i\n", curelement->data);
+			printf("unsigned int: %i\n", *((int*)(curelement->data)));
 		}
 	}
 	#endif

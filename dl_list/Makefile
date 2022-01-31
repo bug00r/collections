@@ -51,33 +51,36 @@ CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 
 INCLUDEDIR=-I.
 
-SRC=dl_list.c
+NAME=dl_list
 
-LIBNAME=libdl_list.a
-OBJS=dl_list.o
+SRC=$(NAME).c
 
-TESTSRC=test_dl_list.c
-TESTBIN=test_dl_list.exe
-TESTLIB=-ldl_list
+LIBNAME=lib$(NAME).a
+LIB=$(BUILDPATH)$(LIBNAME)
+OBJS=$(BUILDPATH)$(NAME).o
+
+TESTSRC=test_$(NAME).c
+TESTBIN=$(BUILDPATH)test_$(NAME).exe
+TESTLIB=-l$(NAME)
 TESTLIBDIR=-L$(BUILDPATH)
 
 INSTALL_ROOT?=$(BUILDPATH)
 
-all: createdir $(BUILDPATH)$(LIBNAME) 
+all: createdir $(LIB) 
 
-$(BUILDPATH)$(LIBNAME): $(BUILDPATH)$(OBJS)
-	$(AR) $(ARFLAGS) $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(OBJS)
+$(LIB): $(OBJS)
+	$(AR) $(ARFLAGS) $@ $^
 
-$(BUILDPATH)$(OBJS): dl_list.h
-	$(CC) $(CFLAGS) -c $(SRC) -o $(BUILDPATH)$(OBJS) $(INCLUDEDIR)  $(debug)
+$(OBJS): $(NAME).h
+	$(CC) $(CFLAGS) -c $(SRC) -o $@ $(INCLUDEDIR)  $(debug)
 	
-$(BUILDPATH)$(TESTBIN):
-	$(CC) $(CFLAGS) $(TESTSRC) -o $(BUILDPATH)$(TESTBIN) $(INCLUDEDIR)  $(TESTLIBDIR) $(TESTLIB) $(debug)
+$(TESTBIN): $(LIB)
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(TESTLIBDIR) $(TESTLIB) $(debug)
 
 .PHONY: clean createdir test
 
-test: $(BUILDPATH)$(TESTBIN)
-	./$(BUILDPATH)$(TESTBIN)
+test: $(TESTBIN)
+	./$(TESTBIN)
 
 createdir:
 	mkdir -p $(BUILDDIR)
@@ -88,5 +91,5 @@ clean:
 install:
 	mkdir -p $(INSTALL_ROOT)include
 	mkdir -p $(INSTALL_ROOT)lib$(BIT_SUFFIX)
-	cp ./dl_list.h $(INSTALL_ROOT)include/dl_list.h
-	cp $(BUILDPATH)$(LIBNAME) $(INSTALL_ROOT)lib$(BIT_SUFFIX)/$(LIBNAME)
+	cp ./$(NAME).h $(INSTALL_ROOT)include/$(NAME).h
+	cp $(LIB) $(INSTALL_ROOT)lib$(BIT_SUFFIX)/$(LIBNAME)

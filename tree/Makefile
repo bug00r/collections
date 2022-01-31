@@ -47,37 +47,40 @@ CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb -O1 
 #-pg for profiling 
 
-INCLUDEDIR=-I./../linked_list -I./../../data -I.
+INCLUDEDIR=-I/c/dev/include/ -I.
 
-SRC=tree.c
+NAME=tree
 
-LIBNAME=libtree.a
-OBJS=tree.o
+SRC=$(NAME).c
 
-TESTSRC=test_tree.c
-TESTBIN=test_tree.exe
-TESTLIB=-ltree -llinked_list -ldata
-TESTLIBDIR=-L$(BUILDPATH) -L./../linked_list/$(BUILDDIR) -L./../../data/$(BUILDDIR)
+LIBNAME=lib$(NAME).a
+LIB=$(BUILDPATH)$(LIBNAME)
+OBJS=$(NAME).o
+
+TESTSRC=test_$(NAME).c
+TESTBIN=$(BUILDPATH)test_$(NAME).exe
+TESTLIB=-l$(NAME) -llinked_list -ldata
+TESTLIBDIR=-L$(BUILDPATH) -L/c/dev/lib/
 
 
-all: createdir $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(TESTBIN) test
+all: createdir $(LIB) $(TESTBIN)
 
-$(BUILDPATH)$(LIBNAME): $(BUILDPATH)$(OBJS)
-	$(AR) $(ARFLAGS) $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(OBJS)
+$(LIB): $(OBJS)
+	$(AR) $(ARFLAGS) $@ $^
 
-$(BUILDPATH)$(OBJS): tree.h
-	$(CC) $(CFLAGS) -c $(SRC) -o $(BUILDPATH)$(OBJS) $(INCLUDEDIR) $(debug)
+$(OBJS): $(NAME).h
+	$(CC) $(CFLAGS) -c $(SRC) -o $@ $(INCLUDEDIR) $(debug)
 	
-$(BUILDPATH)$(TESTBIN):
-	$(CC) $(CFLAGS) $(TESTSRC) -o $(BUILDPATH)$(TESTBIN) $(INCLUDEDIR) $(TESTLIBDIR) $(TESTLIB) $(debug)
+$(TESTBIN): $(LIB)
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(INCLUDEDIR) $(TESTLIBDIR) $(TESTLIB) $(debug)
 
 .PHONY: clean createdir test
 
 test:
-	./$(BUILDPATH)$(TESTBIN)
+	./$(TESTBIN)
 
 createdir:
-	mkdir -p $(BUILDDIR)
+	-mkdir -p $(BUILDDIR)
 
 clean:
 	-rm -dr $(BUILDROOT)
