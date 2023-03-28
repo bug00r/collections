@@ -33,9 +33,9 @@ void dl_list_insert_append_idx(dl_list_t *list, uint32_t index, void *value);
 void* dl_list_get(dl_list_t *list, uint32_t index);
 void* dl_list_remove(dl_list_t *list, uint32_t index);
 void  dl_list_remove_free(dl_list_t *list, uint32_t index, void (freefunc)(void *data));
-void* hgen_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
-int   hgen_search_once_id(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
-dl_list_t* hgen_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
+void* dl_list_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
+int   dl_list_search_once_idx(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
+dl_list_t* dl_list_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data));
 void  dl_list_each(dl_list_t *list, EACH_FUNC eachfunc);
 void  dl_list_each_data(dl_list_t *list, void* eachdata, EACH_FUNC_DATA eachfunc);
 

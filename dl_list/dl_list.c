@@ -292,7 +292,7 @@ void dl_list_remove_free(dl_list_t *list, uint32_t index, void (freefunc)(void *
 
 }
 
-void* hgen_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
+void* dl_list_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
 	void *result = NULL;
 
 	dl_list_item_t* cur_node = list->first;
@@ -308,7 +308,7 @@ void* hgen_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(vo
 	return result; 
 }
 
-int hgen_search_once_id(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {
+int dl_list_search_once_idx(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {
 	int result = -1;
 	bool found = false;
 
@@ -326,7 +326,7 @@ int hgen_search_once_id(dl_list_t *list, void *search_data, bool (*searchfunc)(v
 	return (found ? result : -1 ); 
 }
 
-dl_list_t* hgen_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
+dl_list_t* dl_list_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
 	dl_list_t *result = dl_list_new();
 
 	dl_list_item_t* cur_node = list->first;

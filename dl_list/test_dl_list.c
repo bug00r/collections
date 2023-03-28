@@ -470,9 +470,9 @@ static void test_dl_list_search_once() {
 	
 	assert(list->cnt == 4);
 
-	assert(hgen_search_once(list, NULL, __dl_list_search_int_gt2) == &data4);
+	assert(dl_list_search_once(list, NULL, __dl_list_search_int_gt2) == &data4);
 
-	assert(hgen_search_once_id(list, NULL, __dl_list_search_int_gt2) == 2);
+	assert(dl_list_search_once_idx(list, NULL, __dl_list_search_int_gt2) == 2);
 
 	dl_list_free(&list);
 
@@ -498,7 +498,7 @@ static void test_dl_list_search() {
 	
 	assert(list->cnt == 4);
 
-	dl_list_t* search_res = hgen_search(list, NULL, __dl_list_search_int_lt3);
+	dl_list_t* search_res = dl_list_search(list, NULL, __dl_list_search_int_lt3);
 
 	assert(search_res->cnt == 3);
 	assert(search_res->first->data == &data1);
