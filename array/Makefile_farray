@@ -1,49 +1,34 @@
-MAKE?=mingw32-make
-AR?=ar
 ARFLAGS?=rcs
 PATHSEP?=/
-CC=gcc
 BUILDROOT?=build
-
-ifeq ($(CLANG),1)
-	export CC=clang
-endif
 
 BUILDDIR?=$(BUILDROOT)$(PATHSEP)$(CC)
 BUILDPATH?=$(BUILDDIR)$(PATHSEP)
 
-ifeq ($(DEBUG),1)
-	export debug=-Ddebug=1 -ggdb
-	export isdebug=1
+ifndef PREFIX
+	INSTALL_ROOT=$(BUILDPATH)
+else
+	INSTALL_ROOT=$(PREFIX)$(PATHSEP)
+	ifeq ($(INSTALL_ROOT),/)
+	INSTALL_ROOT=$(BUILDPATH)
+	endif
 endif
 
-ifeq ($(ANALYSIS),1)
-	export analysis=-Danalysis=1
-	export isanalysis=1
+ifdef DEBUG
+	CFLAGS+=-ggdb
+	ifeq ($(DEBUG),)
+	CFLAGS+=-Ddebug=1
+	else 
+	CFLAGS+=-Ddebug=$(DEBUG)
+	endif
 endif
-
-ifeq ($(DEBUG),2)
-	export debug=-Ddebug=2 -ggdb
-	export isdebug=1
-endif
-
-ifeq ($(DEBUG),3)
-	export debug=-Ddebug=3 -ggdb
-	export isdebug=1
-endif
-
-ifeq ($(OUTPUT),1)
-	export outimg=-Doutput=1
-endif
-
-BIT_SUFFIX=
 
 ifeq ($(M32),1)
 	CFLAGS+=-m32
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -Wall -Wextra $(debug)
+CFLAGS+=-std=c11 -Wpedantic -Wall -Wextra
 ##-ggdb
 ##-pg for profiling 
 
@@ -53,29 +38,27 @@ SRC=$(MODULE).c
 
 LIBNAME=lib$(MODULE).a
 LIB=$(BUILDPATH)$(LIBNAME)
-OBJS=$(MODULE).o
+OBJS=$(BUILDPATH)$(MODULE).o
 
 TESTSRC=test_$(MODULE).c
 TESTBIN=$(BUILDPATH)test_$(MODULE).exe
 TESTLIB=-larray -l$(MODULE)
 TESTLIBDIR=-L$(BUILDDIR)
 
-INSTALL_ROOT?=$(BUILDPATH)
-
-all: $(LIB) $(TESTBIN) $(OBJS)
+all: $(LIB)
  
 $(LIB): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
-$(OBJS): $(MODULE).h
-	$(CC) $(CFLAGS) -c $(SRC) -o $@
+$(BUILDDIR)/%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
-$(TESTBIN):
-	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(TESTLIBDIR) $(TESTLIB) 
+$(TESTBIN): $(LIB)
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS) $(TESTLIBDIR) $(TESTLIB) 
 	
 .PHONY: test
 
-test: 
+test: $(TESTBIN)
 	./$(TESTBIN)
 
 install:
