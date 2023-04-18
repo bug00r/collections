@@ -45,6 +45,8 @@ TESTBIN=$(BUILDPATH)test_$(MODULE).exe
 TESTLIB=-larray -l$(MODULE)
 TESTLIBDIR=-L$(BUILDDIR)
 
+LDFLAGS+=$(TESTLIBDIR) $(TESTLIB) 
+
 all: $(LIB)
  
 $(LIB): $(OBJS)
@@ -54,7 +56,7 @@ $(BUILDDIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(TESTBIN): $(LIB)
-	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS) $(TESTLIBDIR) $(TESTLIB) 
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS)
 	
 .PHONY: test
 

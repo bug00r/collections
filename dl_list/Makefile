@@ -47,7 +47,7 @@ TESTBIN=$(BUILDPATH)test_$(NAME).exe
 TESTLIB=-l$(NAME)
 TESTLIBDIR=-L$(BUILDPATH)
 
-INSTALL_ROOT?=$(BUILDPATH)
+LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
 
 all: createdir $(LIB) 
 
@@ -58,7 +58,7 @@ $(BUILDDIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
 	
 $(TESTBIN): $(LIB)
-	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS) $(TESTLIBDIR) $(TESTLIB)
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS)
 
 .PHONY: clean createdir test
 

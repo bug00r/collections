@@ -47,8 +47,9 @@ TESTBIN=$(BUILDPATH)test_$(NAME).exe
 TESTLIB=-l$(NAME) -llinked_list -ldata
 TESTLIBDIR=-L$(BUILDPATH) -L/c/dev/lib/
 
+LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
 
-all: createdir $(LIB) $(TESTBIN)
+all: createdir $(LIB)
 
 $(LIB): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
@@ -57,11 +58,11 @@ $(BUILDDIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 	
 $(TESTBIN): $(LIB)
-	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(INCLUDEDIR) $(TESTLIBDIR) $(TESTLIB)
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS)
 
 .PHONY: clean createdir test
 
-test:
+test: createdir $(TESTBIN)
 	./$(TESTBIN)
 
 createdir:
