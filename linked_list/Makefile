@@ -33,11 +33,11 @@ ifeq ($(M32),1)
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
+override CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb -O1 
 #-pg for profiling 
 
-CFLAGS+=-I/c/dev/include
+override CFLAGS+=-I/c/dev/include
 
 NAME=linked_list
 
@@ -52,7 +52,7 @@ TESTBIN=$(BUILDPATH)test_$(NAME).exe
 TESTLIB=-l$(NAME) -ldata
 TESTLIBDIR=-L$(BUILDPATH) -L/c/dev/lib$(BIT_SUFFIX)
 
-LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
+override LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
 
 all: createdir $(LIB)
 

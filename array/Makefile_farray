@@ -33,7 +33,7 @@ ifeq ($(M32),1)
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -Wall -Wextra
+override CFLAGS+=-std=c11 -Wpedantic -Wall -Wextra
 ##-ggdb
 ##-pg for profiling 
 
@@ -50,7 +50,7 @@ TESTBIN=$(BUILDPATH)test_$(MODULE).exe
 TESTLIB=-larray -l$(MODULE)
 TESTLIBDIR=-L$(BUILDDIR)
 
-LDFLAGS+=$(TESTLIBDIR) $(TESTLIB) 
+override LDFLAGS+=$(TESTLIBDIR) $(TESTLIB) 
 
 all: $(LIB)
  
