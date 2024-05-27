@@ -3,38 +3,38 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-array_t * 
+Array * 
 array_new(int dimensions, int dimension_size, size_t entry_size){
-	array_t * newarray = malloc(sizeof(array_t));
+	Array * newarray = malloc(sizeof(Array));
 	newarray->entries = malloc(dimensions*dimension_size*entry_size);
 	newarray->size = dimensions * dimension_size;
 	newarray->entrysize = entry_size;
-	dimension_t * newdim = malloc(sizeof(dimension_t));
+	Dimension * newdim = malloc(sizeof(Dimension));
 	newdim->cnt = dimensions;
 	newdim->size = dimension_size;
 	newarray->config = newdim;
 	return newarray;
 }
 
-array_t * 
+Array * 
 array1D_new(int cnt_i, size_t entry_size){
 	return array_new(1, cnt_i, entry_size);
 }
 
-array_t * 
+Array * 
 array2D_new(int cnt_i, int cnt_j, size_t entry_size){
 	return array_new(cnt_i, cnt_j, entry_size);
 }
 
-array_t * 
-array_copy_deep(array_t *  array){
-	array_t * newarray = array_new(array->config->cnt, array->config->size, array->entrysize);
+Array * 
+array_copy_deep(Array *  array){
+	Array * newarray = array_new(array->config->cnt, array->config->size, array->entrysize);
 	memcpy(newarray->entries, array->entries, array->entrysize*array->size);
 	return newarray;
 }
 
 void 
-array_init(array_t *  array, void *  init_value, void (*assoc_func)(void *  array_entry, int newidx ,void *  init_value)){
+array_init(Array *  array, void *  init_value, void (*assoc_func)(void *  array_entry, int newidx ,void *  init_value)){
 	int size = array->config->size;
 	int cnt = array->config->cnt;
 	for(int i = 0; i < cnt; ++i){
@@ -45,8 +45,8 @@ array_init(array_t *  array, void *  init_value, void (*assoc_func)(void *  arra
 	}
 }
 
-array_error_t 
-array_get(array_t *  array, int index, void (*assoc_func)(void *  result, int newidx ,void *  value), void *  result)
+ArrayError 
+array_get(Array *  array, int index, void (*assoc_func)(void *  result, int newidx ,void *  value), void *  result)
 {
 	if ( index < 0 ){
 		return ARRAY_ERR_UNDERFLOW;
@@ -58,13 +58,13 @@ array_get(array_t *  array, int index, void (*assoc_func)(void *  result, int ne
 	}
 }
 
-array_error_t 
-array2D_get(array_t *  array, int j, int i, void (*assoc_func)(void *  result, int newidx,void *  value), void *  result){
+ArrayError 
+array2D_get(Array *  array, int j, int i, void (*assoc_func)(void *  result, int newidx,void *  value), void *  result){
 	return array_get( array, (i * array->config->cnt + j), (*assoc_func), result);
 }
 
-array_error_t 
-array_set(array_t *  array, int index, void *  value, void (*assoc_func)(void *  array_entry, int newidx ,void *  value)){
+ArrayError 
+array_set(Array *  array, int index, void *  value, void (*assoc_func)(void *  array_entry, int newidx ,void *  value)){
 	if ( index < 0 ){
 		return ARRAY_ERR_UNDERFLOW;
 	} else if (index < array->size) {
@@ -75,48 +75,48 @@ array_set(array_t *  array, int index, void *  value, void (*assoc_func)(void * 
 	}
 }
 
-array_error_t 
-array2D_set(array_t *  array, int j, int i, void *  value, void (*assoc_func)(void *  array_entry, int newidx ,void *  value)){
+ArrayError 
+array2D_set(Array *  array, int j, int i, void *  value, void (*assoc_func)(void *  array_entry, int newidx ,void *  value)){
 	return array_set( array, (i * array->config->cnt + j), value, (*assoc_func));
 }
 
-array_iterator_t * 
-array_iterator_new(array_t *  array){
-	array_iterator_t * new_it = malloc(sizeof(array_iterator_t));
+ArrayIterator * 
+array_iterator_new(Array *  array){
+	ArrayIterator * new_it = malloc(sizeof(ArrayIterator));
 	new_it->index = 0;
 	new_it->array = array;
 	return new_it;
 }
 
-bool array_iterator_has_next(array_iterator_t *  iterator){
+bool array_iterator_has_next(ArrayIterator *  iterator){
 	return iterator->index < iterator->array->size;
 }
 
 void * 
-array_iterator_next(array_iterator_t *  iterator){
+array_iterator_next(ArrayIterator *  iterator){
 	return iterator->array->entries + (iterator->index++*iterator->array->entrysize);
 }
 
 void 
-array_iterator_free(array_iterator_t *  iterator){
+array_iterator_free(ArrayIterator *  iterator){
 	free(iterator);
 }
 
-array_iterator2D_t * 
-array_iterator2D_new(array_t *  array){
-	array_iterator2D_t * new_it = malloc(sizeof(array_iterator2D_t));
+ArrayIterator2D * 
+array_iterator2D_new(Array *  array){
+	ArrayIterator2D * new_it = malloc(sizeof(ArrayIterator2D));
 	new_it->index_x = 0;
 	new_it->index_y = 0;
 	new_it->array = array;
 	return new_it;
 }
 
-bool array_iterator2D_has_next(array_iterator2D_t *  iterator){
+bool array_iterator2D_has_next(ArrayIterator2D *  iterator){
 	return (iterator->index_y * iterator->array->config->size + iterator->index_x ) < iterator->array->size;
 }
 
 void * 
-array_iterator2D_next(array_iterator2D_t *  iterator){
+array_iterator2D_next(ArrayIterator2D *  iterator){
 	void * entry = iterator->array->entries+((iterator->index_y * iterator->array->config->size + iterator->index_x )*iterator->array->entrysize);
 	
 	if ( iterator->index_x == iterator->array->config->size ){
@@ -135,13 +135,13 @@ array_iterator2D_next(array_iterator2D_t *  iterator){
 }
 
 void 
-array_iterator2D_free(array_iterator2D_t *  iterator){
+array_iterator2D_free(ArrayIterator2D *  iterator){
 	free(iterator);
 }
 
 
 void 
-array_free(array_t *  array){
+array_free(Array *  array){
 	free(array->config);
 	free(array->entries);
 	free(array);

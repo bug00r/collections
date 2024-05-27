@@ -10,7 +10,7 @@ static void _test_tree_node_data_alloc_() {
 	#endif
 	
 	{
-		tree_node_data_t * data = tree_node_data_new();
+		TreeNodeData * data = tree_node_data_new();
 		tree_node_data_free(data);
 	}
 	
@@ -37,12 +37,12 @@ static void _test_alloc_node_() {
 	#endif
 	
 	{
-		tree_node_t * node = NULL;
+		TreeNode * node = NULL;
 		tree_node_free(&node);
 	}
 	
 	{
-		tree_node_t * node = tree_node_new();
+		TreeNode * node = tree_node_new();
 		assert(node->data == NULL);
 		assert(node->parent == NULL);
 		assert(node->children->start == NULL);
@@ -53,7 +53,7 @@ static void _test_alloc_node_() {
 	}
 	
 	{
-		tree_node_t * node;
+		TreeNode * node;
 		tree_node_new_dest(&node);
 		assert(node->data == NULL);
 		assert(node->parent == NULL);
@@ -65,12 +65,12 @@ static void _test_alloc_node_() {
 	}
 	
 	{
-		tree_node_t * node = tree_node_new();
-		tree_node_t * node1 = tree_node_new();
+		TreeNode * node = tree_node_new();
+		TreeNode * node1 = tree_node_new();
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int);
 		*i = 666;
-		data_t * data = data_new((void**)&i, size_int);
+		Data * data = data_new((void**)&i, size_int);
 		node->parent = node1;
 		node->data = data;
 		assert(node->data != NULL);
@@ -101,13 +101,13 @@ static void _test_clear_node_() {
 	#endif
 	
 	{
-		tree_node_t * node = tree_node_new();
-		tree_node_t * node1 = tree_node_new();
-		tree_node_t * child = tree_node_new();
+		TreeNode * node = tree_node_new();
+		TreeNode * node1 = tree_node_new();
+		TreeNode * child = tree_node_new();
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int);
 		*i = 666;
-		data_t * data = data_new((void**)&i, size_int);
+		Data * data = data_new((void**)&i, size_int);
 		node->parent = node1;
 		node->data = data;
 		tree_node_prepend_child(node, child);
@@ -139,14 +139,14 @@ static void _test_attach_data_node_() {
 	#endif
 	
 	{
-		tree_node_t * node = tree_node_new();
+		TreeNode * node = tree_node_new();
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 667;
 		
-		data_t * data_dest;
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
+		Data * data_dest;
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
 
 		tree_node_attach_data(node, NULL);
 		assert(node->data == NULL);
@@ -184,23 +184,23 @@ static void _test_copy_node_() {
 	#endif
 	
 	{
-		tree_node_t * node = tree_node_new();
-		tree_node_t * node2 = tree_node_new();
-		tree_node_t * child = tree_node_new();
+		TreeNode * node = tree_node_new();
+		TreeNode * node2 = tree_node_new();
+		TreeNode * child = tree_node_new();
 		
 		node->parent = node2;
 		node2->parent = node;
-		tree_node_t * node_copy = NULL;
-		tree_node_t * node_copy2 = NULL;
+		TreeNode * node_copy = NULL;
+		TreeNode * node_copy2 = NULL;
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 667;
 		unsigned int * i3 = malloc(size_int); *i3 = 668;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
-		data_t * data3 = data_new((void**)&i3, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
+		Data * data3 = data_new((void**)&i3, size_int);
 		
 		tree_node_attach_data(node, data);
 		tree_node_attach_data(node2, data2);
@@ -224,16 +224,16 @@ static void _test_copy_node_() {
 		assert(node_copy->children->start != NULL);
 		assert(node_copy->children->start == node_copy->children->end);
 		assert(node_copy->children->start->data != NULL);
-		tree_node_t * thedata = (tree_node_t *)node_copy->children->start->data->data;
-		tree_node_t * thedata2 = (tree_node_t *)node->children->start->data->data;
+		TreeNode * thedata = (TreeNode *)node_copy->children->start->data->data;
+		TreeNode * thedata2 = (TreeNode *)node->children->start->data->data;
 		assert(thedata != NULL);
 		assert(thedata2 != NULL);
 		assert(thedata != thedata2);
 		assert(thedata->parent == node_copy );
 		assert(thedata2->parent == node);
 		assert(node_copy->parent == node2);
-		data_t * childdata = thedata->data;
-		data_t * childdata2 = thedata2->data; 
+		Data * childdata = thedata->data;
+		Data * childdata2 = thedata2->data; 
 
 		assert(childdata != childdata2);
 		assert(childdata->data != childdata2->data);
@@ -273,13 +273,13 @@ static void _test_detach_data_node_() {
 	#endif
 	
 	{
-		tree_node_t * node = tree_node_new();
+		TreeNode * node = tree_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * detached;
+		Data * data = data_new((void**)&i, size_int);
+		Data * detached;
 		
 		tree_node_attach_data(node, data);
 		assert(node->data == data);
@@ -306,9 +306,9 @@ static void _test_detach_data_node_() {
 
 static void _test_tree_node_append_child_() {
 	
-	tree_node_t * _parent = tree_node_new();
-	tree_node_t * _newchild = tree_node_new();
-	tree_node_t * onlyforcheck = _newchild;
+	TreeNode * _parent = tree_node_new();
+	TreeNode * _newchild = tree_node_new();
+	TreeNode * onlyforcheck = _newchild;
 	
 	//you will loose rights for child, because the parent will take a look :)
 	tree_node_append_child(_parent, &_newchild);

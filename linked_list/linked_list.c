@@ -9,13 +9,13 @@
 	creates new empty node
 */
 #endif
-ll_node_t * ll_node_new(){ 
-	ll_node_t * newnode = malloc(sizeof(ll_node_t));
+LlNode * ll_node_new(){ 
+	LlNode * newnode = malloc(sizeof(LlNode));
 	newnode->data = NULL;
 	newnode->next = NULL;
 	return newnode; 
 } 
-void ll_node_new_dest(ll_node_t ** dest){
+void ll_node_new_dest(LlNode ** dest){
 	*dest = ll_node_new();
 }
 
@@ -24,10 +24,10 @@ void ll_node_new_dest(ll_node_t ** dest){
 	deletes node. It will deletes data too
 */
 #endif
-void ll_node_free(ll_node_t ** _node){
-	ll_node_t * node = *_node;
+void ll_node_free(LlNode ** _node){
+	LlNode * node = *_node;
 	if ( node != NULL ) {
-		data_t * data = node->data;
+		Data * data = node->data;
 		data_free(data);
 		free(node);
 		*_node = NULL;
@@ -38,9 +38,9 @@ void ll_node_free(ll_node_t ** _node){
 	deletes nodes content. It will deletes data too
 */
 #endif
-void ll_node_clear(ll_node_t *_node){
-	ll_node_t * node = _node;
-	data_t * data = node->data;
+void ll_node_clear(LlNode *_node){
+	LlNode * node = _node;
+	Data * data = node->data;
 	data_free(data);
 	node->data = NULL;
 	node->next = NULL;
@@ -50,8 +50,8 @@ void ll_node_clear(ll_node_t *_node){
 	attach new data to node. Does nothing if data exist.
 */
 #endif
-void ll_node_attach_data(ll_node_t * _node, data_t * _data){
-	ll_node_t * node = _node;
+void ll_node_attach_data(LlNode * _node, Data * _data){
+	LlNode * node = _node;
 	if(node->data == NULL) {
 		node->data = _data;
 	}
@@ -61,9 +61,9 @@ void ll_node_attach_data(ll_node_t * _node, data_t * _data){
 	attach new data to node. If data exist the new data will be attached and then the old one returned.
 */
 #endif
-data_t * ll_node_attach_data_override(ll_node_t * _node, data_t * data){
-	ll_node_t * node = _node;
-	data_t * olddata = node->data;
+Data * ll_node_attach_data_override(LlNode * _node, Data * data){
+	LlNode * node = _node;
+	Data * olddata = node->data;
 	node->data = data;
 	return olddata;
 }
@@ -73,7 +73,7 @@ data_t * ll_node_attach_data_override(ll_node_t * _node, data_t * data){
 	linked to dest pointer.
 */
 #endif
-void ll_node_attach_data_override_dest(data_t **dest, ll_node_t *node, data_t *data){
+void ll_node_attach_data_override_dest(Data **dest, LlNode *node, Data *data){
 	*dest = ll_node_attach_data_override(node, data);
 }
 #if 0
@@ -82,8 +82,8 @@ void ll_node_attach_data_override_dest(data_t **dest, ll_node_t *node, data_t *d
 	Value is NULL too.
 */
 #endif
-ll_node_t * ll_node_copy(ll_node_t * src){
-	ll_node_t * copy = NULL;
+LlNode * ll_node_copy(LlNode * src){
+	LlNode * copy = NULL;
 	if ( src != NULL ){
 		copy = ll_node_new();
 		copy->data = data_copy(src->data);
@@ -96,7 +96,7 @@ ll_node_t * ll_node_copy(ll_node_t * src){
 	Copy node src and saves result to dest.
 */
 #endif
-void ll_node_copy_dest(ll_node_t ** dest, ll_node_t * src) {
+void ll_node_copy_dest(LlNode ** dest, LlNode * src) {
 	*dest = ll_node_copy(src);
 }
 #if 0
@@ -104,9 +104,9 @@ void ll_node_copy_dest(ll_node_t ** dest, ll_node_t * src) {
 	removes data from node and return the removed data. Returns null if no data exist or data is NULL.
 */
 #endif
-data_t * ll_node_detach_data(ll_node_t * _node){
-	data_t * data = NULL;
-	ll_node_t * node = _node;
+Data * ll_node_detach_data(LlNode * _node){
+	Data * data = NULL;
+	LlNode * node = _node;
 	if (node != NULL) {
 		data = node->data;
 		node->data = NULL;
@@ -118,7 +118,7 @@ data_t * ll_node_detach_data(ll_node_t * _node){
 	removes data from node and add the removed data to dest. If no data attached NULL will added.
 */
 #endif
-void ll_node_detach_data_dest(data_t ** dest, ll_node_t *node){
+void ll_node_detach_data_dest(Data ** dest, LlNode *node){
 	*dest = ll_node_detach_data(node);
 }
 
@@ -135,22 +135,22 @@ void ll_node_detach_data_dest(data_t ** dest, ll_node_t *node){
 	creates new empty list
 */
 #endif
-llist_t * llist_new(){
-	llist_t *newlist = malloc(sizeof(llist_t));
+LList * llist_new(){
+	LList *newlist = malloc(sizeof(LList));
 	newlist->start = NULL;
 	newlist->end = NULL;
 	newlist->len = 0;
 	return newlist;
 }
-void llist_new_dest(llist_t **list){
+void llist_new_dest(LList **list){
 	*list = llist_new();
 }
 
-static void _for_each_node_(llist_t * _list, void (*func)(ll_node_t ** _curnode)) {
-	llist_t * list = _list;
+static void _for_each_node_(LList * _list, void (*func)(LlNode ** _curnode)) {
+	LList * list = _list;
 	if (list != NULL) {
-		ll_node_t * curnode = list->start;
-		ll_node_t * tmp = NULL;
+		LlNode * curnode = list->start;
+		LlNode * tmp = NULL;
 		while( curnode != NULL) {
 			tmp = curnode->next;
 			(*func)(&curnode);
@@ -164,8 +164,8 @@ static void _for_each_node_(llist_t * _list, void (*func)(ll_node_t ** _curnode)
  delete complete list.
 */
 #endif
-void llist_free(llist_t ** _list){
-	llist_t * list = *_list;
+void llist_free(LList ** _list){
+	LList * list = *_list;
 	if (list != NULL) {
 		_for_each_node_(list, ll_node_free);
 		list->start = NULL;
@@ -180,7 +180,7 @@ void llist_free(llist_t ** _list){
  clears whole list complete list. the data will be deleted.
 */
 #endif
-void llist_clear(llist_t *list){
+void llist_clear(LList *list){
 	if (list != NULL) {
 		_for_each_node_(list, ll_node_free );
 		list->start = NULL;
@@ -194,9 +194,9 @@ void llist_clear(llist_t *list){
 	Add copy of node at end of list. It should be a new or not in use node. Otherwise there is an undefined behaviour.
 */
 #endif
-void llist_append_node(llist_t * _list, ll_node_t * _newnode){
-	llist_t * list = _list;
-	ll_node_t * newnode = _newnode;
+void llist_append_node(LList * _list, LlNode * _newnode){
+	LList * list = _list;
+	LlNode * newnode = _newnode;
 	if ( list != NULL && newnode != NULL ) {
 		if ( list->start == NULL && list->end == NULL) { 
 			list->start = newnode; 
@@ -212,9 +212,9 @@ void llist_append_node(llist_t * _list, ll_node_t * _newnode){
 Add element at beginning of list.
 */
 #endif
-void llist_prepend_node(llist_t * _list, ll_node_t * _newnode){
-	llist_t * list = _list;
-	ll_node_t * newnode = _newnode;
+void llist_prepend_node(LList * _list, LlNode * _newnode){
+	LList * list = _list;
+	LlNode * newnode = _newnode;
 	if ( list != NULL && newnode != NULL ) {
 		if ( list->start == NULL && list->end == NULL) { 
 			list->end = newnode;
@@ -231,9 +231,9 @@ void llist_prepend_node(llist_t * _list, ll_node_t * _newnode){
 Search node in list. returns node if found, otherwise NULL.
 */
 #endif
-static ll_node_t * _find_node_(llist_t * list, ll_node_t * node) {
-	ll_node_t * next = list->start;
-	ll_node_t * cur = next;
+static LlNode * _find_node_(LList * list, LlNode * node) {
+	LlNode * next = list->start;
+	LlNode * cur = next;
 	while(cur != NULL) {
 		next = cur->next;
 		if ( cur == node ) return node;
@@ -248,10 +248,10 @@ Search previous node in list. returns previous node if found, otherwise NULL. Re
 previous node found. If usednode contains node the search was success. if not success usednode contains NULL.
 */
 #endif
-static ll_node_t * _find_prev_node_(llist_t * list, ll_node_t * node, ll_node_t ** usednode) {
-	ll_node_t * next = list->start;
-	ll_node_t * cur = next;
-	ll_node_t * prev = NULL;
+static LlNode * _find_prev_node_(LList * list, LlNode * node, LlNode ** usednode) {
+	LlNode * next = list->start;
+	LlNode * cur = next;
+	LlNode * prev = NULL;
 	*usednode = NULL;
 	while(cur != NULL) {
 		next = cur->next;
@@ -272,12 +272,12 @@ static ll_node_t * _find_prev_node_(llist_t * list, ll_node_t * node, ll_node_t 
 Insert Node after sibling.
 */
 #endif
-void llist_insert_before(llist_t * _list, ll_node_t * _sibling, ll_node_t * _newnode){
-	llist_t * list = _list; 
-	ll_node_t * sibling = _sibling; 
-	ll_node_t * newnode = _newnode;
-	ll_node_t * prev = NULL;
-	ll_node_t * used = NULL;
+void llist_insert_before(LList * _list, LlNode * _sibling, LlNode * _newnode){
+	LList * list = _list; 
+	LlNode * sibling = _sibling; 
+	LlNode * newnode = _newnode;
+	LlNode * prev = NULL;
+	LlNode * used = NULL;
 	if (list != NULL && sibling != NULL && newnode != NULL ) {
 		prev = _find_prev_node_(list, sibling, &used);
 		if ( used == sibling ) {
@@ -297,14 +297,14 @@ void llist_insert_before(llist_t * _list, ll_node_t * _sibling, ll_node_t * _new
 Insert Node before sibling.
 */
 #endif
-void llist_insert_after(llist_t * _list, ll_node_t * _sibling ,ll_node_t * _newnode){
-	llist_t * list = _list; 
-	ll_node_t * sibling = _sibling; 
-	ll_node_t * newnode = _newnode;
+void llist_insert_after(LList * _list, LlNode * _sibling ,LlNode * _newnode){
+	LList * list = _list; 
+	LlNode * sibling = _sibling; 
+	LlNode * newnode = _newnode;
 	
 	if (list != NULL && sibling != NULL && newnode != NULL && 
 		(_find_node_(list, sibling) != NULL)) {
-		ll_node_t * tmp = sibling->next;
+		LlNode * tmp = sibling->next;
 		sibling->next = newnode;
 		newnode->next = tmp;
 		if ( tmp == NULL ) {
@@ -318,11 +318,11 @@ void llist_insert_after(llist_t * _list, ll_node_t * _sibling ,ll_node_t * _newn
 Delete node. Deletes node if it exist in list.
 */
 #endif
-void llist_delete_node(llist_t * _list, ll_node_t * _delnode){
-	llist_t * list = _list; 
-	ll_node_t * delnode = _delnode;
-	ll_node_t * prev = NULL;
-	ll_node_t * used = NULL;
+void llist_delete_node(LList * _list, LlNode * _delnode){
+	LList * list = _list; 
+	LlNode * delnode = _delnode;
+	LlNode * prev = NULL;
+	LlNode * used = NULL;
 	if (list != NULL && delnode != NULL ) {
 		prev = _find_prev_node_(list, delnode, &used);
 		if ( used == delnode ) {
@@ -347,12 +347,12 @@ void llist_delete_node(llist_t * _list, ll_node_t * _delnode){
 delete node after node. Deletes node if it exist in list.
 */
 #endif
-void llist_delete_node_after(llist_t * _list, ll_node_t * _node){
-	llist_t * list = _list; 
-	ll_node_t * node = _node;
-	ll_node_t * found = NULL;
-	ll_node_t * todelete = NULL;
-	ll_node_t * overnext = NULL;
+void llist_delete_node_after(LList * _list, LlNode * _node){
+	LList * list = _list; 
+	LlNode * node = _node;
+	LlNode * found = NULL;
+	LlNode * todelete = NULL;
+	LlNode * overnext = NULL;
 	if (list != NULL && node != NULL ) {
 		found = _find_node_(list, node);
 		if(found != NULL) {
@@ -376,12 +376,12 @@ void llist_delete_node_after(llist_t * _list, ll_node_t * _node){
 delete node after node. Deletes node if it exist in list.
 */
 #endif
-void llist_delete_node_before(llist_t * _list, ll_node_t * _node){
-	llist_t * list = _list; 
-	ll_node_t * node = _node;
-	ll_node_t * used = NULL;
-	ll_node_t * todelete = NULL;
-	ll_node_t * prevprev = NULL;
+void llist_delete_node_before(LList * _list, LlNode * _node){
+	LList * list = _list; 
+	LlNode * node = _node;
+	LlNode * used = NULL;
+	LlNode * todelete = NULL;
+	LlNode * prevprev = NULL;
 	if (list != NULL && node != NULL ) {
 		todelete = _find_prev_node_(list, node, &used);
 		if(used != NULL) {
@@ -408,16 +408,16 @@ void llist_delete_node_before(llist_t * _list, ll_node_t * _node){
 */
 #endif
 
-static void _copy_all_nodes_from_list_(llist_t * _src, ll_node_t ** _dest, ll_node_t ** _end, int * _copied) {
-	llist_t * src = _src; 
-	ll_node_t ** dest = _dest; 
-	ll_node_t ** end = _end;
+static void _copy_all_nodes_from_list_(LList * _src, LlNode ** _dest, LlNode ** _end, int * _copied) {
+	LList * src = _src; 
+	LlNode ** dest = _dest; 
+	LlNode ** end = _end;
 	int * copied = _copied;
 	
-	ll_node_t * start = NULL;
-	ll_node_t * current = src->start;
-	ll_node_t * last = NULL;
-	ll_node_t * tmp = NULL;
+	LlNode * start = NULL;
+	LlNode * current = src->start;
+	LlNode * last = NULL;
+	LlNode * tmp = NULL;
 	
 	while(current != NULL) {
 		tmp = ll_node_copy(current);
@@ -442,11 +442,11 @@ static void _copy_all_nodes_from_list_(llist_t * _src, ll_node_t ** _dest, ll_no
 	of elements in list2.
 */
 #endif
-void llist_append_list(llist_t * _list, llist_t * _list2){
-	llist_t * list = _list;
-	llist_t * list2 = _list2;
-	ll_node_t * startcopy = NULL;
-	ll_node_t * endcopy = NULL;
+void llist_append_list(LList * _list, LList * _list2){
+	LList * list = _list;
+	LList * list2 = _list2;
+	LlNode * startcopy = NULL;
+	LlNode * endcopy = NULL;
 	int copied = 0;
 	_copy_all_nodes_from_list_(list2, &startcopy, &endcopy, &copied);
 	if ( copied != 0 && startcopy != NULL ) {
@@ -461,9 +461,9 @@ void llist_append_list(llist_t * _list, llist_t * _list2){
 	}
 }
 
-void* llist_list_get_data(llist_t *list, uint32_t index) {
-	llist_t * src = list; 
-	ll_node_t * next = src->start;
+void* llist_list_get_data(LList *list, uint32_t index) {
+	LList * src = list; 
+	LlNode * next = src->start;
 	uint32_t curIdx = 0;
 	void *result = NULL;
 	while(next != NULL) {
@@ -483,11 +483,11 @@ void* llist_list_get_data(llist_t *list, uint32_t index) {
 Merges two lists. The second list is the starting list.
 */
 #endif
-void llist_prepend_list(llist_t * _list, llist_t * _list2){
-	llist_t * list = _list;
-	llist_t * list2 = _list2;
-	ll_node_t * startcopy = NULL;
-	ll_node_t * endcopy = NULL;
+void llist_prepend_list(LList * _list, LList * _list2){
+	LList * list = _list;
+	LList * list2 = _list2;
+	LlNode * startcopy = NULL;
+	LlNode * endcopy = NULL;
 	int copied = 0;
 	_copy_all_nodes_from_list_(list2, &startcopy, &endcopy, &copied);
 	if ( copied != 0 && startcopy != NULL ) {
@@ -502,11 +502,11 @@ void llist_prepend_list(llist_t * _list, llist_t * _list2){
 	}
 }
 
-static void _search_by_method_(llist_t * _src, llist_t * _dest, bool onlyone,
+static void _search_by_method_(LList * _src, LList * _dest, bool onlyone,
 							   void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
-	llist_t * src = _src; 
-	llist_t * dest = _dest;
-	ll_node_t * next = src->start;
+	LList * src = _src; 
+	LList * dest = _dest;
+	LlNode * next = src->start;
 	if( dest != NULL ) {
 		while(next != NULL) {
 			void * curdata = NULL;
@@ -514,7 +514,7 @@ static void _search_by_method_(llist_t * _src, llist_t * _dest, bool onlyone,
 				curdata = next->data->data;
 			}
 			if((*searchmethod)(curdata, searchdata)) {
-				ll_node_t * tmp = ll_node_copy(next);
+				LlNode * tmp = ll_node_copy(next);
 				tmp->next = NULL;
 				llist_append_node(dest, tmp);
 				if(onlyone && dest->len == 1) {
@@ -532,9 +532,9 @@ Returns the all found nodes. The result is a linked list with a copy of all foun
 result list will be the response
 */
 #endif
-llist_t * llist_search_node_all(llist_t * list, 
+LList * llist_search_node_all(LList * list, 
 								void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
-	llist_t * result = llist_new();
+	LList * result = llist_new();
 	if ( list != NULL && searchdata != NULL && searchmethod != NULL) {
 		_search_by_method_(list, result, false, searchdata, searchmethod);
 	}
@@ -546,7 +546,7 @@ Returns the all found nodes. The result is a linked list with a copy of all foun
 Resultlist will add to the resultlistpointer.
 */
 #endif
-void llist_search_node_all_dest(llist_t ** resultlist, llist_t * list, 
+void llist_search_node_all_dest(LList ** resultlist, LList * list, 
 								void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
 	*resultlist = llist_new();
 	if ( list != NULL && searchdata != NULL && searchmethod != NULL) {
@@ -559,9 +559,9 @@ returns the first node which data comparing functions returns true. The return v
 or NULL if no node was found.
 */
 #endif
-ll_node_t * llist_search_node_first(llist_t * list, 
+LlNode * llist_search_node_first(LList * list, 
 								void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
-	llist_t result = { NULL, NULL, 0 };
+	LList result = { NULL, NULL, 0 };
 	if ( list != NULL && searchdata != NULL && searchmethod != NULL) {
 		_search_by_method_(list, &result, true, searchdata, searchmethod);
 	}
@@ -573,9 +573,9 @@ returns the first node which data comparing functions returns true. The result v
 or NULL if no node was found and will add to the result pointer.
 */
 #endif
-void llist_search_node_first_dest(ll_node_t ** resultnode,llist_t * list, 
+void llist_search_node_first_dest(LlNode ** resultnode,LList * list, 
 								void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
-	llist_t result = { NULL, NULL, 0 };
+	LList result = { NULL, NULL, 0 };
 	if ( list != NULL && searchdata != NULL && searchmethod != NULL) {
 		_search_by_method_(list, &result, true, searchdata, searchmethod);
 	}
@@ -588,11 +588,11 @@ returns the previous node which data comparing functions returns true. The retur
 or NULL if no node was found.
 */
 #endif
-ll_node_t * llist_search_previous_node(llist_t * list, 
+LlNode * llist_search_previous_node(LList * list, 
 								void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
-	llist_t result = { NULL, NULL, 0 };
-	ll_node_t * foundprevnode = NULL;
-	ll_node_t * used = NULL;
+	LList result = { NULL, NULL, 0 };
+	LlNode * foundprevnode = NULL;
+	LlNode * used = NULL;
 	if ( list != NULL && searchdata != NULL && searchmethod != NULL) {
 		_search_by_method_(list, &result, true, searchdata, searchmethod);
 		if ( result.start != NULL ) {
@@ -607,7 +607,7 @@ returns the previous node which data comparing functions returns true. The resul
 or NULL if no node was found and will add to the result pointer.
 */
 #endif
-void llist_search_previous_node_dest(ll_node_t ** resultnode,llist_t * list, 
+void llist_search_previous_node_dest(LlNode ** resultnode,LList * list, 
 								void * searchdata, bool (*searchmethod)(void * nodedata, void * searchdata)) {
 	*resultnode = llist_search_previous_node(list, searchdata, searchmethod);
 }

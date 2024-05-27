@@ -24,7 +24,7 @@
 static void test_dl_list_alloc_free() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -41,7 +41,7 @@ static void test_dl_list_alloc_free() {
 static void test_dl_list_append() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -91,7 +91,7 @@ static void test_dl_list_append() {
 static void test_dl_list_prepend() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -141,7 +141,7 @@ static void test_dl_list_prepend() {
 static void test_dl_list_insert_prepend() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -189,7 +189,7 @@ static void test_dl_list_insert_prepend() {
 static void test_dl_list_insert_append() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -235,7 +235,7 @@ static void test_dl_list_insert_append() {
 static void test_dl_list_insert_prepend_idx() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -281,7 +281,7 @@ static void test_dl_list_insert_prepend_idx() {
 static void test_dl_list_insert_append_idx() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	assert(list != NULL);
 	assert(list->cnt == 0);
@@ -324,7 +324,7 @@ static void test_dl_list_insert_append_idx() {
 static void test_dl_list_get() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	int data1 = 1;
 	int data2 = 2;
@@ -360,7 +360,7 @@ static void test_dl_list_get() {
 static void test_dl_list_remove() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	int data1 = 1;
 	int data2 = 2;
@@ -403,7 +403,7 @@ static void my_free_func(void *data) {
 static void test_dl_list_remove_free() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	int *data1 = malloc(sizeof(int));
 	*data1 = 1;
@@ -456,7 +456,7 @@ static bool __dl_list_search_int_lt3(void *item, void* searchdata) {
 static void test_dl_list_search_once() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 	
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	int data1 = 1;
 	int data2 = 2;
@@ -484,7 +484,7 @@ static void test_dl_list_search_once() {
 static void test_dl_list_search() {
 	DEBUG_LOG_ARGS(">>> %s => %s\n", __FILE__, __func__);
 	
-	dl_list_t* list = dl_list_new();
+	DlList* list = dl_list_new();
 
 	int data1 = 1;
 	int data2 = 2;
@@ -498,7 +498,7 @@ static void test_dl_list_search() {
 	
 	assert(list->cnt == 4);
 
-	dl_list_t* search_res = dl_list_search(list, NULL, __dl_list_search_int_lt3);
+	DlList* search_res = dl_list_search(list, NULL, __dl_list_search_int_lt3);
 
 	assert(search_res->cnt == 3);
 	assert(search_res->first->data == &data1);

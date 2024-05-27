@@ -95,12 +95,12 @@ static void _test_alloc_node_() {
 	#endif
 	
 	{
-		ll_node_t * node = NULL;
+		LlNode * node = NULL;
 		ll_node_free(&node);
 	}
 	
 	{
-		ll_node_t * node = ll_node_new();
+		LlNode * node = ll_node_new();
 		assert(node->data == NULL);
 		assert(node->next == NULL);
 		ll_node_free(&node);
@@ -108,7 +108,7 @@ static void _test_alloc_node_() {
 	}
 	
 	{
-		ll_node_t * node;
+		LlNode * node;
 		ll_node_new_dest(&node);
 		assert(node->data == NULL);
 		assert(node->next == NULL);
@@ -117,12 +117,12 @@ static void _test_alloc_node_() {
 	}
 	
 	{
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node1 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node1 = ll_node_new();
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int);
 		*i = 666;
-		data_t * data = data_new((void**)&i, size_int);
+		Data * data = data_new((void**)&i, size_int);
 		node->next = node1;
 		node->data = data;
 		assert(node->data != NULL);
@@ -147,12 +147,12 @@ static void _test_clear_node_() {
 	#endif
 	
 	{
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node1 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node1 = ll_node_new();
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int);
 		*i = 666;
-		data_t * data = data_new((void**)&i, size_int);
+		Data * data = data_new((void**)&i, size_int);
 		node->next = node1;
 		node->data = data;
 		assert(node->data != NULL);
@@ -176,14 +176,14 @@ static void _test_attach_data_node_() {
 	#endif
 	
 	{
-		ll_node_t * node = ll_node_new();
+		LlNode * node = ll_node_new();
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 667;
 		
-		data_t * data_dest;
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
+		Data * data_dest;
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
 
 		ll_node_attach_data(node, NULL);
 		assert(node->data == NULL);
@@ -221,19 +221,19 @@ static void _test_copy_node_() {
 	#endif
 	
 	{
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
 		node->next = node2;
 		node2->next = node;
-		ll_node_t * node_copy = NULL;
-		ll_node_t * node_copy2 = NULL;
+		LlNode * node_copy = NULL;
+		LlNode * node_copy2 = NULL;
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 667;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
 
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
@@ -280,13 +280,13 @@ static void _test_detach_data_node_() {
 	#endif
 	
 	{
-		ll_node_t * node = ll_node_new();
+		LlNode * node = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * detached;
+		Data * data = data_new((void**)&i, size_int);
+		Data * detached;
 		
 		ll_node_attach_data(node, data);
 		assert(node->data == data);
@@ -336,8 +336,8 @@ static void _test_alloc_list_() {
 		#ifdef debug
 			printf(">>> free empty list \n");
 		#endif
-		llist_t * list = llist_new();
-		llist_t * list2 = NULL;
+		LList * list = llist_new();
+		LList * list2 = NULL;
 		llist_new_dest(&list2);
 		
 		llist_free(&list);
@@ -355,8 +355,8 @@ static void _test_alloc_list_() {
 		#ifdef debug
 			printf(">>> clear empty list \n");
 		#endif
-		llist_t * list = llist_new();
-		llist_t * list2 = NULL;
+		LList * list = llist_new();
+		LList * list2 = NULL;
 		llist_new_dest(&list2);
 		
 		llist_clear(list);
@@ -390,20 +390,20 @@ static void _test_add_node_list_() {
 		#ifdef debug
 			printf(">>> append \n");
 		#endif
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 666;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
 		
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
 		
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		llist_append_node(list, node);
 		llist_append_node(list, node2);
 		
@@ -427,20 +427,20 @@ static void _test_add_node_list_() {
 		#ifdef debug
 			printf(">>> prepend \n");
 		#endif
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 666;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
 		
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
 		
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		llist_prepend_node(list, node);
 		llist_prepend_node(list, node2);
 		
@@ -475,24 +475,24 @@ static void _test_insert_list_() {
 			printf(">>> after \n");
 		#endif
 		
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 667;
 		unsigned int * i3 = malloc(size_int); *i3 = 668;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
-		data_t * data3 = data_new((void**)&i3, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
+		Data * data3 = data_new((void**)&i3, size_int);
 		
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
 		ll_node_attach_data(node3, data3);
 		
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		
 		llist_insert_after(NULL, NULL, NULL);
 		llist_insert_after(list, NULL, NULL);
@@ -546,24 +546,24 @@ static void _test_insert_list_() {
 			printf(">>> before \n");
 		#endif
 
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
 		unsigned int * i2 = malloc(size_int); *i2 = 667;
 		unsigned int * i3 = malloc(size_int); *i3 = 668;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
-		data_t * data3 = data_new((void**)&i3, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
+		Data * data3 = data_new((void**)&i3, size_int);
 		
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
 		ll_node_attach_data(node3, data3);
 		
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		
 		llist_insert_before(NULL, NULL, NULL);
 		llist_insert_before(list, NULL, NULL);
@@ -627,11 +627,11 @@ static void _test_del_node_list_() {
 		#ifdef debug
 			printf(">>> direct \n");
 		#endif
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
 		
 		llist_append_node(list, node);
 		llist_append_node(list, node2);
@@ -674,11 +674,11 @@ static void _test_del_node_list_() {
 		#ifdef debug
 			printf(">>> after \n");
 		#endif
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
 		
 		llist_append_node(list, node);
 		llist_append_node(list, node2);
@@ -727,11 +727,11 @@ static void _test_del_node_list_() {
 		#ifdef debug
 			printf(">>> before \n");
 		#endif
-		llist_t * list = llist_new();
+		LList * list = llist_new();
 		
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
 		
 		llist_append_node(list, node);
 		llist_append_node(list, node2);
@@ -792,12 +792,12 @@ static void _test_append_list_() {
 	#endif
 	
 	{
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
-		ll_node_t * node4 = ll_node_new();
-		ll_node_t * node5 = ll_node_new();
-		ll_node_t * node6 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
+		LlNode * node4 = ll_node_new();
+		LlNode * node5 = ll_node_new();
+		LlNode * node6 = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
@@ -807,12 +807,12 @@ static void _test_append_list_() {
 		unsigned int * i5 = malloc(size_int); *i5 = 670;
 		unsigned int * i6 = malloc(size_int); *i6 = 671;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
-		data_t * data3 = data_new((void**)&i3, size_int);
-		data_t * data4 = data_new((void**)&i4, size_int);
-		data_t * data5 = data_new((void**)&i5, size_int);
-		data_t * data6 = data_new((void**)&i6, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
+		Data * data3 = data_new((void**)&i3, size_int);
+		Data * data4 = data_new((void**)&i4, size_int);
+		Data * data5 = data_new((void**)&i5, size_int);
+		Data * data6 = data_new((void**)&i6, size_int);
 		
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
@@ -821,8 +821,8 @@ static void _test_append_list_() {
 		ll_node_attach_data(node5, data5);
 		ll_node_attach_data(node6, data6);
 		
-		llist_t * list = llist_new();
-		llist_t * list2 = llist_new();
+		LList * list = llist_new();
+		LList * list2 = llist_new();
 		llist_append_node(list, node);
 		llist_append_node(list, node2);
 		llist_append_node(list, node3);
@@ -876,12 +876,12 @@ static void _test_prepend_list_() {
 	#endif
 	
 	{
-		ll_node_t * node = ll_node_new();
-		ll_node_t * node2 = ll_node_new();
-		ll_node_t * node3 = ll_node_new();
-		ll_node_t * node4 = ll_node_new();
-		ll_node_t * node5 = ll_node_new();
-		ll_node_t * node6 = ll_node_new();
+		LlNode * node = ll_node_new();
+		LlNode * node2 = ll_node_new();
+		LlNode * node3 = ll_node_new();
+		LlNode * node4 = ll_node_new();
+		LlNode * node5 = ll_node_new();
+		LlNode * node6 = ll_node_new();
 		
 		size_t size_int = sizeof(unsigned int);
 		unsigned int * i = malloc(size_int); *i = 666;
@@ -891,12 +891,12 @@ static void _test_prepend_list_() {
 		unsigned int * i5 = malloc(size_int); *i5 = 670;
 		unsigned int * i6 = malloc(size_int); *i6 = 671;
 		
-		data_t * data = data_new((void**)&i, size_int);
-		data_t * data2 = data_new((void**)&i2, size_int);
-		data_t * data3 = data_new((void**)&i3, size_int);
-		data_t * data4 = data_new((void**)&i4, size_int);
-		data_t * data5 = data_new((void**)&i5, size_int);
-		data_t * data6 = data_new((void**)&i6, size_int);
+		Data * data = data_new((void**)&i, size_int);
+		Data * data2 = data_new((void**)&i2, size_int);
+		Data * data3 = data_new((void**)&i3, size_int);
+		Data * data4 = data_new((void**)&i4, size_int);
+		Data * data5 = data_new((void**)&i5, size_int);
+		Data * data6 = data_new((void**)&i6, size_int);
 		
 		ll_node_attach_data(node, data);
 		ll_node_attach_data(node2, data2);
@@ -905,8 +905,8 @@ static void _test_prepend_list_() {
 		ll_node_attach_data(node5, data5);
 		ll_node_attach_data(node6, data6);
 		
-		llist_t * list = llist_new();
-		llist_t * list2 = llist_new();
+		LList * list = llist_new();
+		LList * list2 = llist_new();
 		llist_append_node(list, node);
 		llist_append_node(list, node2);
 		llist_append_node(list, node3);
@@ -974,12 +974,12 @@ static void _test_search_list_() {
 		printf(">>> search list\n");
 	#endif
 	
-	ll_node_t * node = ll_node_new();
-	ll_node_t * node2 = ll_node_new();
-	ll_node_t * node3 = ll_node_new();
-	ll_node_t * node4 = ll_node_new();
-	ll_node_t * node5 = ll_node_new();
-	ll_node_t * node6 = ll_node_new();
+	LlNode * node = ll_node_new();
+	LlNode * node2 = ll_node_new();
+	LlNode * node3 = ll_node_new();
+	LlNode * node4 = ll_node_new();
+	LlNode * node5 = ll_node_new();
+	LlNode * node6 = ll_node_new();
 	
 	size_t size_int = sizeof(unsigned int);
 	unsigned int * i = malloc(size_int); *i = 666;
@@ -989,12 +989,12 @@ static void _test_search_list_() {
 	unsigned int * i5 = malloc(size_int); *i5 = 670;
 	unsigned int * i6 = malloc(size_int); *i6 = 671;
 	unsigned int search = 0;
-	data_t * data = data_new((void**)&i, size_int);
-	data_t * data2 = data_new((void**)&i2, size_int);
-	data_t * data3 = data_new((void**)&i3, size_int);
-	data_t * data4 = data_new((void**)&i4, size_int);
-	data_t * data5 = data_new((void**)&i5, size_int);
-	data_t * data6 = data_new((void**)&i6, size_int);
+	Data * data = data_new((void**)&i, size_int);
+	Data * data2 = data_new((void**)&i2, size_int);
+	Data * data3 = data_new((void**)&i3, size_int);
+	Data * data4 = data_new((void**)&i4, size_int);
+	Data * data5 = data_new((void**)&i5, size_int);
+	Data * data6 = data_new((void**)&i6, size_int);
 	
 	ll_node_attach_data(node, data);
 	ll_node_attach_data(node2, data2);
@@ -1003,7 +1003,7 @@ static void _test_search_list_() {
 	ll_node_attach_data(node5, data5);
 	ll_node_attach_data(node6, data6);
 	
-	llist_t * list = llist_new();
+	LList * list = llist_new();
 	llist_append_node(list, node);
 	llist_append_node(list, node2);
 	llist_append_node(list, node3);
@@ -1017,7 +1017,7 @@ static void _test_search_list_() {
 		#endif
 		
 		search = 666;
-		llist_t * result = llist_search_node_all(list, &search, _ui_llist_cmp_ne_);
+		LList * result = llist_search_node_all(list, &search, _ui_llist_cmp_ne_);
 		assert(result->len == 5);
 		assert(*(unsigned int*)result->start->data->data == 667);
 		assert(*(unsigned int*)result->start->next->data->data == 668);
@@ -1046,7 +1046,7 @@ static void _test_search_list_() {
 			printf(">>> find first match\n");
 		#endif
 		search = 666;
-		ll_node_t * result = llist_search_node_first(list, &search, _ui_llist_cmp_ne_);
+		LlNode * result = llist_search_node_first(list, &search, _ui_llist_cmp_ne_);
 		assert(result != NULL);
 		assert(*(unsigned int*)result->data->data == 667);
 		assert(result->next == NULL);

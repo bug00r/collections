@@ -10,13 +10,13 @@ main() {
 		printf("test collections float array:\n");
 	#endif
 	
-	array_t * oneD = farray_new(10);
-	array_t * twoD = farray2D_new(5,5);
+	Array * oneD = farray_new(10);
+	Array * twoD = farray2D_new(5,5);
 	
 	farray_init(oneD, 5.f);
 	farray_init(twoD, 15.f);
 
-	array_error_t farray_res;
+	ArrayError farray_res;
 	
 	farray_res = farray_set(oneD, 8, 100.f);
 	assert(farray_res == ARRAY_ERR_OK);

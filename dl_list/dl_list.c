@@ -1,13 +1,13 @@
 #include "dl_list.h"
 
-static void __dl_list_reset(dl_list_t *list) {
+static void __dl_list_reset(DlList *list) {
 	list->last = NULL;
 	list->first = NULL;
 	list->cnt = 0;
 }
 
-static dl_list_item_t* __dl_list_item_new(void *data) {
-	dl_list_item_t* newitem = malloc(sizeof(dl_list_item_t));
+static DlListItem* __dl_list_item_new(void *data) {
+	DlListItem* newitem = malloc(sizeof(DlListItem));
 	if(newitem) {
 		newitem->data = data;
 		newitem->next = NULL;
@@ -16,20 +16,20 @@ static dl_list_item_t* __dl_list_item_new(void *data) {
 	return newitem;
 }
 
-static void __dl_list_item_free(dl_list_item_t **item) {
+static void __dl_list_item_free(DlListItem **item) {
 	if ( item != NULL && *item != NULL ) {
-		dl_list_item_t *to_delete = *item;
+		DlListItem *to_delete = *item;
 		free(to_delete);
 		*item = NULL;
 	}
 }
 
-static void __dl_list_add_first_node(dl_list_t *list, dl_list_item_t* node) {
+static void __dl_list_add_first_node(DlList *list, DlListItem* node) {
 	list->first = node;
 	list->last = node;
 }
 
-static void __dl_list_append_node(dl_list_item_t* basenode, dl_list_item_t* newnode) {
+static void __dl_list_append_node(DlListItem* basenode, DlListItem* newnode) {
 	
 	newnode->prev = basenode;
 
@@ -42,7 +42,7 @@ static void __dl_list_append_node(dl_list_item_t* basenode, dl_list_item_t* newn
 
 }
 
-static void __dl_list_prepend_node(dl_list_item_t* basenode, dl_list_item_t* newnode) {
+static void __dl_list_prepend_node(DlListItem* basenode, DlListItem* newnode) {
 	
 	newnode->next = basenode;
 
@@ -55,7 +55,7 @@ static void __dl_list_prepend_node(dl_list_item_t* basenode, dl_list_item_t* new
 
 }
 
-static void __dl_list_remove_node(dl_list_t *list, dl_list_item_t* node) {
+static void __dl_list_remove_node(DlList *list, DlListItem* node) {
 	
 	if (list->cnt == 1) {
 		__dl_list_item_free(&node);
@@ -68,8 +68,8 @@ static void __dl_list_remove_node(dl_list_t *list, dl_list_item_t* node) {
 			node->prev->next = NULL;
 			list->last = node->prev;
 		} else {
-			dl_list_item_t* next = node->next;
-			dl_list_item_t* prev = node->prev;
+			DlListItem* next = node->next;
+			DlListItem* prev = node->prev;
 			prev->next = next;
 			next->prev = prev;
 		}
@@ -79,9 +79,9 @@ static void __dl_list_remove_node(dl_list_t *list, dl_list_item_t* node) {
 
 }
 
-static dl_list_item_t* __search_node_by_data(dl_list_t *list, void *data) {
-	dl_list_item_t* result = NULL;
-	dl_list_item_t* cur_node = list->first;
+static DlListItem* __search_node_by_data(DlList *list, void *data) {
+	DlListItem* result = NULL;
+	DlListItem* cur_node = list->first;
 
 	while(cur_node != NULL) {
 		if ( cur_node->data == data ) {
@@ -94,9 +94,9 @@ static dl_list_item_t* __search_node_by_data(dl_list_t *list, void *data) {
 	return result;
 }
 
-static dl_list_item_t* __search_node_by_idx(dl_list_t *list, uint32_t idx) {
-	dl_list_item_t* result = NULL;
-	dl_list_item_t* cur_node = list->first;
+static DlListItem* __search_node_by_idx(DlList *list, uint32_t idx) {
+	DlListItem* result = NULL;
+	DlListItem* cur_node = list->first;
 
 	if (idx < list->cnt) {
 		
@@ -115,9 +115,9 @@ static dl_list_item_t* __search_node_by_idx(dl_list_t *list, uint32_t idx) {
 	return result;
 }
 
-static void __dl_list_clear(dl_list_t* list) {
-	dl_list_item_t* cur_item = list->first;
-	dl_list_item_t* tmp_item = NULL;
+static void __dl_list_clear(DlList* list) {
+	DlListItem* cur_item = list->first;
+	DlListItem* tmp_item = NULL;
 
 	while(cur_item != NULL) {
 		tmp_item = cur_item->next;
@@ -134,8 +134,8 @@ static void __dl_list_clear(dl_list_t* list) {
 //###############################################################################################################
 #endif
 
-dl_list_t* dl_list_new() {
-	dl_list_t *newlist = malloc(sizeof(dl_list_t));
+DlList* dl_list_new() {
+	DlList *newlist = malloc(sizeof(DlList));
 	if ( newlist ) {
 		__dl_list_reset(newlist);
 	}
@@ -143,9 +143,9 @@ dl_list_t* dl_list_new() {
 	return newlist;
 }
 
-void dl_list_free(dl_list_t**list) {  
+void dl_list_free(DlList**list) {  
 	if ( list != NULL && *list != NULL ) {
-		dl_list_t *to_delete = *list;
+		DlList *to_delete = *list;
 		
 		__dl_list_clear(to_delete);
 
@@ -154,13 +154,13 @@ void dl_list_free(dl_list_t**list) {
 	}
 }
 
-void dl_list_clear(dl_list_t* list) {
+void dl_list_clear(DlList* list) {
 	__dl_list_clear(list);
 }
 
-void dl_list_append(dl_list_t *list, void *data) { 
+void dl_list_append(DlList *list, void *data) { 
 	if (list != NULL) {
-		dl_list_item_t* newitem = __dl_list_item_new(data);
+		DlListItem* newitem = __dl_list_item_new(data);
 
 		if (list->cnt == 0) {
 			__dl_list_add_first_node(list, newitem);
@@ -173,10 +173,10 @@ void dl_list_append(dl_list_t *list, void *data) {
 	}
 }
 
-void dl_list_prepend(dl_list_t *list, void *data) {  
+void dl_list_prepend(DlList *list, void *data) {  
 
 	if (list != NULL) {
-		dl_list_item_t* newitem = __dl_list_item_new(data);
+		DlListItem* newitem = __dl_list_item_new(data);
 
 		if (list->cnt == 0) {
 			__dl_list_add_first_node(list, newitem);
@@ -190,11 +190,11 @@ void dl_list_prepend(dl_list_t *list, void *data) {
 
 }
 
-void dl_list_insert_prepend(dl_list_t *list, void *sibling, void *value) {  
+void dl_list_insert_prepend(DlList *list, void *sibling, void *value) {  
 	if ( list != NULL ) {
-		dl_list_item_t* sibl_node = __search_node_by_data(list, sibling);
+		DlListItem* sibl_node = __search_node_by_data(list, sibling);
 		if (sibl_node != NULL) {
-			dl_list_item_t* newitem = __dl_list_item_new(value);
+			DlListItem* newitem = __dl_list_item_new(value);
 
 			__dl_list_prepend_node(sibl_node, newitem);
 
@@ -203,11 +203,11 @@ void dl_list_insert_prepend(dl_list_t *list, void *sibling, void *value) {
 	}
 }
 
-void dl_list_insert_append(dl_list_t *list, void *sibling, void *value) {  
+void dl_list_insert_append(DlList *list, void *sibling, void *value) {  
 	if ( list != NULL ) {
-		dl_list_item_t* sibl_node = __search_node_by_data(list, sibling);
+		DlListItem* sibl_node = __search_node_by_data(list, sibling);
 		if (sibl_node != NULL) {
-			dl_list_item_t* newitem = __dl_list_item_new(value);
+			DlListItem* newitem = __dl_list_item_new(value);
 
 			__dl_list_append_node(sibl_node, newitem);
 			
@@ -216,12 +216,12 @@ void dl_list_insert_append(dl_list_t *list, void *sibling, void *value) {
 	}
 }
 
-void dl_list_insert_prepend_idx(dl_list_t *list, uint32_t index, void *value) {  
+void dl_list_insert_prepend_idx(DlList *list, uint32_t index, void *value) {  
 	if ( list != NULL ) {
-		dl_list_item_t* found = __search_node_by_idx(list, index);
+		DlListItem* found = __search_node_by_idx(list, index);
 
 		if (found != NULL) {
-			dl_list_item_t* newitem = __dl_list_item_new(value);
+			DlListItem* newitem = __dl_list_item_new(value);
 
 			__dl_list_prepend_node(found, newitem);
 
@@ -231,12 +231,12 @@ void dl_list_insert_prepend_idx(dl_list_t *list, uint32_t index, void *value) {
 	}	
 }
 
-void dl_list_insert_append_idx(dl_list_t *list, uint32_t index, void *value) {  
+void dl_list_insert_append_idx(DlList *list, uint32_t index, void *value) {  
 	if ( list != NULL ) {
-		dl_list_item_t* found = __search_node_by_idx(list, index);
+		DlListItem* found = __search_node_by_idx(list, index);
 
 		if (found != NULL) {
-			dl_list_item_t* newitem = __dl_list_item_new(value);
+			DlListItem* newitem = __dl_list_item_new(value);
 
 			__dl_list_append_node(found, newitem);
 
@@ -246,11 +246,11 @@ void dl_list_insert_append_idx(dl_list_t *list, uint32_t index, void *value) {
 	}	
 }
 
-void* dl_list_get(dl_list_t *list, uint32_t index) { 
+void* dl_list_get(DlList *list, uint32_t index) { 
 	void *result = NULL;
 
 	if ( list != NULL ) {
-		dl_list_item_t* found = __search_node_by_idx(list, index);
+		DlListItem* found = __search_node_by_idx(list, index);
 		if (found) {
 			result = found->data;
 		}
@@ -261,11 +261,11 @@ void* dl_list_get(dl_list_t *list, uint32_t index) {
 
 
 
-void* dl_list_remove(dl_list_t *list, uint32_t index) {  
+void* dl_list_remove(DlList *list, uint32_t index) {  
 	void *result = NULL;
 
 	if ( list != NULL ) {
-		dl_list_item_t* found = __search_node_by_idx(list, index);
+		DlListItem* found = __search_node_by_idx(list, index);
 		if (found) {
 			result = found->data;
 			__dl_list_remove_node(list, found);
@@ -275,10 +275,10 @@ void* dl_list_remove(dl_list_t *list, uint32_t index) {
 	return result;
 }
 
-void dl_list_remove_free(dl_list_t *list, uint32_t index, void (freefunc)(void *data)) {  
+void dl_list_remove_free(DlList *list, uint32_t index, void (freefunc)(void *data)) {  
 	
 	if ( list != NULL ) {
-		dl_list_item_t* found = __search_node_by_idx(list, index);
+		DlListItem* found = __search_node_by_idx(list, index);
 		if (found) {
 
 			if(freefunc != NULL) {
@@ -292,10 +292,10 @@ void dl_list_remove_free(dl_list_t *list, uint32_t index, void (freefunc)(void *
 
 }
 
-void* dl_list_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
+void* dl_list_search_once(DlList *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
 	void *result = NULL;
 
-	dl_list_item_t* cur_node = list->first;
+	DlListItem* cur_node = list->first;
 
 	while(cur_node != NULL) {
 		if ( searchfunc(cur_node->data, search_data) ) {
@@ -308,11 +308,11 @@ void* dl_list_search_once(dl_list_t *list, void *search_data, bool (*searchfunc)
 	return result; 
 }
 
-int dl_list_search_once_idx(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {
+int dl_list_search_once_idx(DlList *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {
 	int result = -1;
 	bool found = false;
 
-	dl_list_item_t* cur_node = list->first;
+	DlListItem* cur_node = list->first;
 
 	while(cur_node != NULL) {
 		++result;
@@ -326,10 +326,10 @@ int dl_list_search_once_idx(dl_list_t *list, void *search_data, bool (*searchfun
 	return (found ? result : -1 ); 
 }
 
-dl_list_t* dl_list_search(dl_list_t *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
-	dl_list_t *result = dl_list_new();
+DlList* dl_list_search(DlList *list, void *search_data, bool (*searchfunc)(void*item, void *search_data)) {  
+	DlList *result = dl_list_new();
 
-	dl_list_item_t* cur_node = list->first;
+	DlListItem* cur_node = list->first;
 
 	while(cur_node != NULL) {
 		if ( searchfunc(cur_node->data, search_data) ) {
@@ -341,9 +341,9 @@ dl_list_t* dl_list_search(dl_list_t *list, void *search_data, bool (*searchfunc)
 	return result; 
 }
 
-void dl_list_each(dl_list_t *list, EACH_FUNC eachfunc) {
+void dl_list_each(DlList *list, EACH_FUNC eachfunc) {
 
-	dl_list_item_t* cur_node = list->first;
+	DlListItem* cur_node = list->first;
 
 	while(cur_node != NULL) {
 
@@ -355,8 +355,8 @@ void dl_list_each(dl_list_t *list, EACH_FUNC eachfunc) {
 
 }
 
-void  dl_list_each_data(dl_list_t *list, void* eachdata, EACH_FUNC_DATA eachfunc) {
-	dl_list_item_t* cur_node = list->first;
+void  dl_list_each_data(DlList *list, void* eachdata, EACH_FUNC_DATA eachfunc) {
+	DlListItem* cur_node = list->first;
 
 	while(cur_node != NULL) {
 

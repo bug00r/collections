@@ -23,8 +23,8 @@ main() {
 		//test array allocation 1D and 2D
 	#endif
 	
-	array_t * oneD;
-	array_t * twoD;
+	Array * oneD;
+	Array * twoD;
 	
 	oneD = array_new(1, 5, sizeof(int));
 	twoD = array_new(2, 10, sizeof(float));
@@ -83,7 +83,7 @@ main() {
 	assert(farray[3] == 2.5);
 	
 	float newvalue = 34.f;
-	array_error_t acresult = array_set(twoD, 2, &newvalue, assoc_float);
+	ArrayError acresult = array_set(twoD, 2, &newvalue, assoc_float);
 	
 	float resultfloat;
 	
@@ -111,7 +111,7 @@ main() {
 	assert(resultfloat == dnewvalue);
 	assert(resultfloat == (2*newvalue));
 	
-	array_iterator_t * it = array_iterator_new(oneD);
+	ArrayIterator * it = array_iterator_new(oneD);
 	#ifdef debug 
 		printf("oneD array contains[");
 		while(array_iterator_has_next(it)) {
@@ -134,7 +134,7 @@ main() {
 	#endif
 	array_iterator_free(it);
 	
-	array_t * copyoftwoD = array_copy_deep(twoD);
+	Array * copyoftwoD = array_copy_deep(twoD);
 	
 	assert(copyoftwoD != twoD);
 	assert(copyoftwoD->entries != twoD->entries);
@@ -155,7 +155,7 @@ main() {
 	#endif
 	array_iterator_free(it);
 	
-	array_iterator2D_t * it2D = array_iterator2D_new(copyoftwoD);
+	ArrayIterator2D * it2D = array_iterator2D_new(copyoftwoD);
 	#ifdef debug 
 		printf("twoD array 2D iterator contains[\n");
 		while(array_iterator2D_has_next(it2D)) {
