@@ -37,7 +37,7 @@ override CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb -O1 
 #-pg for profiling 
 
-override CFLAGS+=-I/c/dev/include/ -I.
+override CFLAGS+=-I. -I/c/dev/include/
 
 NAME=tree
 
